@@ -31,17 +31,70 @@
     .foto-bagian{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:20px;margin:22px 0}
     .foto-sampul{display:block;width:100%;border-radius:0;margin:0;max-height:560px;object-fit:cover}
 
-    /* === TEKA-TEKI SILANG === */
-    .tts-grid{display:grid;grid-template-columns:repeat(11,36px);gap:2px;width:max-content;background:#94a3b8;padding:2px;border:2px solid #0f172a;border-radius:6px}
-    .tts-cell{position:relative;width:36px;height:36px}
-    .tts-cell.blank{background:#0f172a}
-    .tts-cell:not(.blank){background:#fff}
-    .tts-cell:not(.blank):focus-within{background:#fef08a}
-    .tts-cell input{width:100%;height:100%;border:0;background:transparent;text-align:center;font-weight:800;text-transform:uppercase;color:#000;font-size:1.1rem;border-radius:0}
+    /* === TEKA-TEKI SILANG — WARNA LEBIH CERAH === */
+    .tts-grid{
+      display:grid;
+      grid-template-columns:repeat(11,36px);
+      gap:2px;
+      width:max-content;
+      background:#174c3d;              /* garis pemisah = hijau tema */
+      padding:2px;
+      border:2px solid #0f172a;
+      border-radius:8px;
+      box-shadow:0 6px 20px -8px rgba(23,76,61,.35);
+    }
+    .tts-cell{
+      position:relative;
+      width:36px;
+      height:36px;
+      border-radius:3px;               /* sudut sedikit membulat, lebih lembut */
+    }
+    .tts-cell.blank{
+      background:#1e293b;              /* biru tua — gelap tapi tidak pekat */
+    }
+    .tts-cell:not(.blank){
+      background:#fffdf5;              /* putih gading hangat */
+    }
+    .tts-cell:not(.blank):focus-within{
+      background:#fff17a;              /* kuning lemon cerah */
+    }
+    .tts-cell input{
+      width:100%;
+      height:100%;
+      border:0;
+      background:transparent;
+      text-align:center;
+      font-weight:800;
+      text-transform:uppercase;
+      color:#0f172a;                   /* biru tua, kontras bagus */
+      font-size:1.1rem;
+      border-radius:0;
+    }
     .tts-cell input:focus{outline:none}
-    .tts-cell .num{position:absolute;top:2px;left:3px;font-size:.55rem;font-weight:700;color:#0f172a;pointer-events:none;line-height:1}
-    .tts-cell.correct:not(.blank){background:#bbf7d0}
-    .tts-cell.wrong:not(.blank){background:#fecaca}
+    .tts-cell .num{
+      position:absolute;
+      top:2px;
+      left:3px;
+      font-size:.55rem;
+      font-weight:700;
+      color:#174c3d;                   /* hijau tema, lebih jelas */
+      pointer-events:none;
+      line-height:1;
+    }
+    .tts-cell.correct:not(.blank){
+      background:#a7f3c3;              /* mint cerah */
+      box-shadow:inset 0 0 0 1px #4ade80;
+      animation:pop .35s ease;
+    }
+    .tts-cell.wrong:not(.blank){
+      background:#fda4af;              /* pink cerah */
+      box-shadow:inset 0 0 0 1px #f87171;
+    }
+    @keyframes pop{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
 
     @media(max-width:640px){
       .tts-grid{grid-template-columns:repeat(11,28px);gap:1px}
@@ -55,7 +108,7 @@
     }
 
     @media(min-width:1024px){.cover-grid{min-height:500px}}
-    @media(prefers-reduced-motion:reduce){.stage.active{animation:none}*{scroll-behavior:auto!important}}
+    @media(prefers-reduced-motion:reduce){.stage.active{animation:none}.tts-cell.correct:not(.blank){animation:none}*{scroll-behavior:auto!important}}
   </style>
   <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
  </head>
@@ -461,8 +514,8 @@
   </script>
 
   <script>
-    /* ===== TEKA-TEKI SILANG — TATA LETAK VALID, PENOMORAN OTOMATIS =====
-       Semua persilangan sudah cocok hurufnya:
+    /* ===== TEKA-TEKI SILANG — TATA LETAK VALID, PENOMORAN OTOMATIS, WARNA CERAH =====
+       Semua persilangan cocok hurufnya:
        (0,4) K = KREATIF x KEBUTUHAN
        (2,4) B = BIAYA x KEBUTUHAN
        (6,1) U = USAHA x UNTUNG
@@ -490,7 +543,7 @@
         }
       }
 
-      /* Bangun sel huruf (semua kata konsisten karena persilangan cocok) */
+      /* Bangun sel huruf (konsisten karena persilangan cocok) */
       WORDS.forEach(w=>{
         for(let i=0;i<w.word.length;i++){
           const r=(w.dir==='M')?w.row:w.row+i;
@@ -559,7 +612,7 @@
         return true;
       }
 
-      /* Pemeriksaan per sel: hijau jika huruf benar, merah jika huruf salah */
+      /* Pemeriksaan per sel: hijau jika huruf benar, merah muda jika salah */
       document.getElementById('tts-check').addEventListener('click',()=>{
         let ok=0;
         WORDS.forEach(w=>{ if(wordCorrect(w)) ok++; });
