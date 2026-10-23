@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MPI Peluang Usaha — Kelas XI SMK</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#16352d;--forest:#174c3d;--lime:#d5ec82;--paper:#f6f4e9;--line:#d6dfd2}
+    *{box-sizing:border-box}
+    body{font-family:"DM Sans",sans-serif;color:var(--ink)}
+    h1,h2{font-family:"Fraunces",serif}
+    .app-shell{width:100%;min-height:calc(100 * min(var(--vh, 1vh), 1vh))}
+    .stage{display:none}.stage.active{display:block;animation:rise .3s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .nav-btn{border:1px solid #d5dfd2;background:#fff;color:#315448;transition:.2s}
+    .nav-btn.active{background:var(--forest);color:white;border-color:var(--forest)}
+    .nav-btn:hover:not(.active){background:#edf3e1}
+    .answer{width:100%;text-align:left;border:2px solid var(--line);border-radius:14px;padding:13px 16px;background:white;transition:.18s}
+    .answer:hover{border-color:#679477;background:#f4f8ed}
+    .answer.selected{border-color:var(--forest);background:#e8f2d9;font-weight:700}
+    button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #d39329;outline-offset:3px}
+    .card{background:white;border:1px solid var(--line);border-radius:22px}
+    .pill{display:inline-block;padding:5px 12px;border-radius:999px;background:#e8efdc;font-weight:700;font-size:.8rem;letter-spacing:.04em}
+    .primary{background:var(--forest);color:white;border-radius:14px;padding:13px 22px;font-weight:700;min-height:48px}
+    .primary:hover{background:#0d392d}
+    .feedback{min-height:24px;font-weight:600}
+    .question{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}
+    .question:first-child{border-top:0;padding-top:0;margin-top:0}
+    .developer-photo{object-fit:cover;object-position:center top;width:66px;height:66px;border-radius:14px;background:#d9e6cf}
+    .foto-bagian{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:20px;margin:22px 0}
+    .foto-sampul{display:block;width:100%;border-radius:0;margin:0;max-height:560px;object-fit:cover}
+    .tts-grid{display:grid;grid-template-columns:repeat(11,36px);gap:5px;width:max-content}
+    .tts-cell{position:relative;width:36px;height:36px}
+    .tts-cell.blank{visibility:hidden}
+    .tts-cell input{width:100%;height:100%;text-align:center;font-weight:800;text-transform:uppercase;border:2px solid #b7cf6b;border-radius:10px;background:var(--lime);color:var(--forest);transition:background .15s ease,color .15s ease,border-color .15s ease}
+    .tts-cell input:not(:placeholder-shown){background:#fff;color:#000}
+    .tts-cell .num{position:absolute;top:1px;left:4px;font-size:.6rem;font-weight:800;color:#3f5a2a;pointer-events:none}
+    .tts-cell.correct input{border-color:#246344}
+    .tts-cell.wrong input{border-color:#92521d}
+    @media(max-width:640px){.tts-grid{grid-template-columns:repeat(11,28px);gap:4px}.tts-cell{width:28px;height:28px}.tts-cell .num{font-size:.5rem}}
+    @media(min-width:1024px){.cover-grid{min-height:500px}}
+    @media(prefers-reduced-motion:reduce){.stage.active{animation:none}*{scroll-behavior:auto!important}}
+  </style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
+ </head>
+ <body class="app-shell">
+  <header class="w-full bg-[#174c3d] text-white">
+   <div class="max-w-7xl mx-auto px-5 md:px-10 py-5 flex flex-wrap gap-3 items-center justify-between">
+    <div class="flex items-center gap-3">
+     <span aria-hidden="true" class="bg-[#d5ec82] text-[#174c3d] rounded-xl p-2 font-extrabold">✦</span>
+     <span class="font-bold tracking-wide">KELAS KREATIF • XI SMK</span>
+    </div>
+    <span class="rounded-full bg-white/15 px-4 py-2">1 pertemuan · 50 menit</span>
+   </div>
+  </header>
+  <div class="w-full max-w-7xl mx-auto px-5 md:px-10 pb-12">
+   <nav aria-label="Tahap pembelajaran" class="py-5 overflow-x-auto">
+    <div class="flex gap-2 min-w-max" id="navigation">
+     <button type="button" class="nav-btn active rounded-xl px-4 py-3 font-semibold" data-stage="cover" aria-current="step">Sampul</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="apersepsi">Apersepsi</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="awal">Asesmen awal</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="materi">Materi pokok</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="simulasi">Simulasi</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="kuis">Kuis</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="tts">Teka-teki silang</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="akhir">Asesmen akhir</button>
+     <button type="button" class="nav-btn rounded-xl px-4 py-3 font-semibold" data-stage="refleksi">Refleksi</button>
+    </div>
+   </nav>
+   <main id="main-content">
+
+    <!-- SAMPUL -->
+    <section id="cover" class="stage active" aria-labelledby="cover-title">
+     <div class="overflow-hidden rounded-[28px] bg-[#174c3d] text-white">
+      <div class="p-7 md:p-12">
+       <span class="text-[#d5ec82] font-bold tracking-widest uppercase">Media Pembelajaran Interaktif</span>
+       <h1 id="cover-title" class="mt-5 font-bold leading-tight">Peluang Usaha Ada di Sekitar Kita</h1>
+       <p class="mt-5 text-[#e1eee5] leading-relaxed">Amati kebutuhan, temukan ide, lalu uji apakah idemu dapat menjadi usaha yang bernilai.</p>
+       <div class="mt-8 flex flex-wrap gap-3">
+        <span class="rounded-full bg-white/15 px-4 py-2">Kreativitas, Inovasi &amp; Kewirausahaan</span>
+        <span class="rounded-full bg-white/15 px-4 py-2">Kelas XI SMK</span>
+       </div>
+       <div class="mt-9 flex items-center gap-4 rounded-2xl bg-white/10 p-3 max-w-sm">
+        <img class="developer-photo shrink-0" src="foto-rastati.png" alt="RASTATI, SP" loading="eager" onerror="this.style.display='none'">
+        <div>
+         <p class="text-[#d5ec82] font-semibold">Foto pengembang</p>
+         <p class="font-bold">RASTATI, SP · SMKN 2 Kolaka</p>
+        </div>
+       </div>
+       <button type="button" data-next="apersepsi" class="mt-8 inline-block rounded-xl bg-[#d5ec82] text-[#16352d] px-7 py-4 font-extrabold hover:bg-[#e7f5aa]">Mulai belajar →</button>
+      </div>
+      <img class="foto-bagian foto-sampul" src="sampul-kelas.jpg" alt="Suasana belajar di kelas XI SMK">
+     </div>
+    </section>
+
+    <!-- APERSEPSI -->
+    <section id="apersepsi" class="stage" aria-labelledby="apersepsi-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">01 · 5 MENIT</span>
+      <h2 id="apersepsi-title" class="mt-4 font-bold">Mulai dari yang dekat</h2>
+      <p class="mt-4 leading-relaxed">Bayangkan istirahat sekolah: antrean kantin panjang, sementara beberapa teman belum sempat sarapan. Masalah apa yang kamu lihat? Produk atau layanan apa yang bisa membantu?</p>
+      <img class="foto-bagian" src="apersepsi-tim.jpg" alt="Siswa bekerja sama dalam tim">
+      <div class="rounded-2xl bg-[#ecf2df] p-6 flex flex-col justify-center">
+       <h3 class="font-bold">Diskusikan bersama teman</h3>
+       <p class="mt-3">Siapa yang membutuhkan solusi? Mengapa mereka akan memilih ide usahamu? Sampaikan satu jawaban secara lisan.</p>
+      </div>
+      <button type="button" data-next="awal" class="primary mt-7">Lanjut ke asesmen awal →</button>
+     </div>
+    </section>
+
+    <!-- ASESMEN AWAL -->
+    <section id="awal" class="stage" aria-labelledby="awal-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">02 · 5 MENIT</span>
+      <h2 id="awal-title" class="mt-4 font-bold">Asesmen awal</h2>
+      <p class="mt-3">Coba jawab tanpa membuka materi. Ini untuk mengenali pemahaman awalmu, bukan menentukan nilai akhir.</p>
+      <div class="question" data-group="awal" data-answer="1" data-explain="Peluang usaha berawal dari kebutuhan atau masalah yang dapat dibantu dengan solusi.">
+       <h3 class="font-bold">1. Manakah contoh kebutuhan yang dapat menjadi peluang usaha di sekolah?</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Warna pagar sekolah berubah</button>
+        <button type="button" data-choice="1" class="answer">Banyak siswa membutuhkan sarapan praktis</button>
+        <button type="button" data-choice="2" class="answer">Bel sekolah berbunyi tepat waktu</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="awal" data-answer="2" data-explain="Ide perlu diuji dengan bertanya kepada calon pelanggan dan memperhitungkan biaya.">
+       <h3 class="font-bold">2. Sebelum menjual produk, langkah paling tepat adalah …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Membeli bahan sebanyak mungkin</button>
+        <button type="button" data-choice="1" class="answer">Meniru harga tanpa menghitung biaya</button>
+        <button type="button" data-choice="2" class="answer">Menanyakan kebutuhan calon pembeli dan menghitung biaya</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <button type="button" data-next="materi" class="primary mt-8">Pelajari materi →</button>
+     </div>
+    </section>
+
+    <!-- MATERI POKOK -->
+    <section id="materi" class="stage" aria-labelledby="materi-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">03 · 15 MENIT</span>
+      <h2 id="materi-title" class="mt-4 font-bold">Mengenali peluang usaha</h2>
+      <p class="mt-3">Peluang usaha adalah kesempatan menciptakan barang atau jasa yang menjawab kebutuhan orang lain dan memungkinkan usaha berjalan secara layak.</p>
+      <div class="grid md:grid-cols-3 gap-4 mt-7">
+       <article class="rounded-2xl bg-[#eaf1e0] p-5">
+        <h3 class="font-bold">1. Amati kebutuhan</h3>
+        <p class="mt-2">Perhatikan keluhan, kebiasaan, tren, dan masalah di sekolah, rumah, atau lingkungan sekitar. Contoh: teman sering lupa membawa alat tulis.</p>
+       </article>
+       <article class="rounded-2xl bg-[#f5ecd8] p-5">
+        <h3 class="font-bold">2. Kenali sumber daya</h3>
+        <p class="mt-2">Cek keterampilan, bahan, waktu, alat, dan modal yang tersedia. Contoh: kamu bisa mendesain label dan memiliki akses ke percetakan kecil.</p>
+       </article>
+       <article class="rounded-2xl bg-[#e6f0ee] p-5">
+        <h3 class="font-bold">3. Uji kelayakan</h3>
+        <p class="mt-2">Tanyakan minat calon pembeli, hitung biaya dan harga, amati pesaing, lalu coba dalam skala kecil. Ide menarik belum tentu layak dijalankan.</p>
+       </article>
+      </div>
+      <img class="foto-bagian" src="materi-usaha-kecil.jpg" alt="Pelaku usaha kecil mengemas produk">
+      <div>
+       <h3 class="font-bold">Contoh penerapan: paket bekal sederhana</h3>
+       <p class="mt-3">Sejumlah teman ingin sarapan cepat sebelum praktik. Kamu menawarkan paket roti dan buah melalui pemesanan sehari sebelumnya. Tanyakan menu yang disukai, hitung biaya bahan dan kemasan, tetapkan harga wajar, lalu uji dengan beberapa pesanan. Catat tanggapan mereka sebelum memperluas penjualan.</p>
+      </div>
+      <div class="mt-7 rounded-2xl border-l-[6px] border-[#bd9a49] bg-[#faf4e5] p-5">
+       <p class="font-bold">Ingat: kebutuhan nyata + kemampuan menyediakan solusi + calon pembeli + perhitungan biaya = peluang yang lebih masuk akal.</p>
+      </div>
+      <button type="button" data-next="simulasi" class="primary mt-7">Coba simulasi →</button>
+     </div>
+    </section>
+
+    <!-- SIMULASI -->
+    <section id="simulasi" class="stage" aria-labelledby="simulasi-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">04 · 10 MENIT</span>
+      <h2 id="simulasi-title" class="mt-4 font-bold">Simulasi: rancang peluangmu</h2>
+      <p class="mt-3">Pilih satu kebutuhan, sumber daya, dan cara menjangkau pembeli. Diskusikan apakah rancanganmu realistis.</p>
+      <img class="foto-bagian" src="simulasi-ide.jpg" alt="Papan ide dengan catatan tempel">
+      <form id="sim-form" class="grid gap-4 content-start">
+       <div>
+        <label for="sim-need" class="block font-bold mb-2">Kebutuhan yang kamu temukan</label>
+        <select id="sim-need" required class="w-full border-2 border-[#d6dfd2] rounded-xl p-3 bg-white">
+         <option value="">Pilih kebutuhan</option>
+         <option value="sarapan praktis untuk siswa">Sarapan praktis untuk siswa</option>
+         <option value="alat tulis saat kegiatan belajar">Alat tulis saat kegiatan belajar</option>
+         <option value="hadiah sederhana untuk teman">Hadiah sederhana untuk teman</option>
+        </select>
+       </div>
+       <div>
+        <label for="sim-resource" class="block font-bold mb-2">Sumber daya yang tersedia</label>
+        <select id="sim-resource" required class="w-full border-2 border-[#d6dfd2] rounded-xl p-3 bg-white">
+         <option value="">Pilih sumber daya</option>
+         <option value="keterampilan membuat makanan dan bahan lokal">Keterampilan membuat makanan dan bahan lokal</option>
+         <option value="akses pemasok alat tulis dan modal kecil">Akses pemasok alat tulis dan modal kecil</option>
+         <option value="keterampilan desain dan bahan kerajinan">Keterampilan desain dan bahan kerajinan</option>
+        </select>
+       </div>
+       <div>
+        <label for="sim-channel" class="block font-bold mb-2">Cara menjangkau pembeli</label>
+        <select id="sim-channel" required class="w-full border-2 border-[#d6dfd2] rounded-xl p-3 bg-white">
+         <option value="">Pilih cara</option>
+         <option value="pemesanan melalui grup kelas">Pemesanan melalui grup kelas</option>
+         <option value="penawaran langsung saat istirahat">Penawaran langsung saat istirahat</option>
+         <option value="katalog sederhana di media sosial">Katalog sederhana di media sosial</option>
+        </select>
+       </div>
+       <button type="submit" class="primary justify-self-start">Susun rancangan</button>
+      </form>
+      <div id="sim-result" class="hidden mt-6 rounded-2xl bg-[#eaf1e0] p-6" aria-live="polite">
+       <h3 class="font-bold">Rancangan peluang usahamu</h3>
+       <p id="sim-output" class="mt-3"></p>
+       <p class="mt-3 font-semibold">Langkah berikutnya: tanyakan minat 3 calon pembeli, perkirakan biaya, dan uji penjualan kecil sebelum menambah modal.</p>
+      </div>
+      <button type="button" data-next="kuis" class="primary mt-7">Kerjakan kuis →</button>
+     </div>
+    </section>
+
+    <!-- KUIS -->
+    <section id="kuis" class="stage" aria-labelledby="kuis-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">05 · 5 MENIT</span>
+      <h2 id="kuis-title" class="mt-4 font-bold">Kuis: cek pemahaman</h2>
+      <p class="mt-3">Pilih jawaban. Jika keliru, baca petunjuk materi lalu coba lagi.</p>
+      <div class="question" data-group="kuis" data-answer="1" data-explain="Pelajari kembali Materi Pokok bagian “Amati kebutuhan”: peluang dimulai dari kebutuhan atau masalah yang nyata.">
+       <h3 class="font-bold">1. Antrean kantin panjang dan banyak siswa belum sarapan. Apa titik awal peluang usaha di sini?</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Membeli peralatan mahal</button>
+        <button type="button" data-choice="1" class="answer">Mengenali kebutuhan sarapan yang cepat</button>
+        <button type="button" data-choice="2" class="answer">Menentukan nama merek terlebih dahulu</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="kuis" data-answer="2" data-explain="Pelajari kembali Materi Pokok bagian “Kenali sumber daya”: cocokkan ide dengan keterampilan, bahan, waktu, alat, dan modal yang tersedia.">
+       <h3 class="font-bold">2. Kamu mahir mendesain dan memiliki akses printer kecil. Ide mana yang paling sesuai sumber dayamu?</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Membuka bengkel kendaraan</button>
+        <button type="button" data-choice="1" class="answer">Mendirikan restoran besar</button>
+        <button type="button" data-choice="2" class="answer">Menerima pesanan stiker atau label</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="kuis" data-answer="0" data-explain="Pelajari kembali Materi Pokok bagian “Uji kelayakan”: periksa minat calon pembeli serta biaya sebelum memproduksi lebih banyak.">
+       <h3 class="font-bold">3. Sebelum membuat 100 paket bekal, langkah terbaik adalah …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Menguji beberapa pesanan dan menghitung biayanya</button>
+        <button type="button" data-choice="1" class="answer">Membeli semua bahan tanpa survei</button>
+        <button type="button" data-choice="2" class="answer">Menentukan harga tanpa mencatat biaya</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <button type="button" data-next="tts" class="primary mt-8">Lanjut ke teka-teki silang →</button>
+     </div>
+    </section>
+
+    <!-- TEKA-TEKI SILANG -->
+    <section id="tts" class="stage" aria-labelledby="tts-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">06 · 10 MENIT</span>
+      <h2 id="tts-title" class="mt-4 font-bold">Teka-teki silang: uji kosakatamu</h2>
+      <p class="mt-3">Isi setiap kotak dengan satu huruf. Kotak berwarna akan berubah menjadi putih berteks hitam saat terisi. Petunjuk ada di sebelah kiri, kisi kotak di sebelah kanan.</p>
+      <div class="grid gap-8 mt-6 lg:grid-cols-[minmax(0,1fr)_auto] items-start">
+       <div class="order-2 lg:order-1 grid gap-6">
+        <div>
+         <h3 class="font-bold">Mendatar</h3>
+         <ol id="tts-mendatar" class="mt-2 grid gap-2 list-none"></ol>
+        </div>
+        <div>
+         <h3 class="font-bold">Menurun</h3>
+         <ol id="tts-menurun" class="mt-2 grid gap-2 list-none"></ol>
+        </div>
+        <p id="tts-feedback" class="feedback" aria-live="polite"></p>
+        <div class="flex flex-wrap gap-3">
+         <button type="button" id="tts-check" class="primary">Periksa jawaban</button>
+         <button type="button" id="tts-reveal" class="nav-btn rounded-xl px-5 py-3 font-semibold">Lihat jawaban</button>
+        </div>
+       </div>
+       <div class="order-1 lg:order-2 overflow-x-auto pb-2">
+        <div id="tts-grid" class="tts-grid"></div>
+       </div>
+      </div>
+      <button type="button" data-next="akhir" class="primary mt-7">Lanjut ke asesmen akhir →</button>
+     </div>
+    </section>
+
+    <!-- ASESMEN AKHIR -->
+    <section id="akhir" class="stage" aria-labelledby="akhir-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">07 · 8 MENIT</span>
+      <h2 id="akhir-title" class="mt-4 font-bold">Asesmen akhir</h2>
+      <p class="mt-3">Jawab kelima soal. Skor dan pembahasan muncul setelah semua soal dijawab.</p>
+      <div class="question" data-group="akhir" data-answer="0" data-explain="Peluang usaha menghubungkan kebutuhan dengan solusi yang berpotensi layak dijalankan.">
+       <span class="pill">PEMAHAMAN</span>
+       <h3 class="font-bold mt-2">1. Peluang usaha paling tepat diartikan sebagai …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Kesempatan memberi solusi atas kebutuhan dengan usaha yang layak</button>
+        <button type="button" data-choice="1" class="answer">Keinginan menjual apa saja tanpa calon pembeli</button>
+        <button type="button" data-choice="2" class="answer">Kegiatan membeli alat sebanyak mungkin</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="akhir" data-answer="1" data-explain="Kebutuhan, keterampilan, modal, dan calon pembeli membantu menilai peluang.">
+       <span class="pill">PEMAHAMAN</span>
+       <h3 class="font-bold mt-2">2. Informasi apa yang paling relevan saat menilai sebuah ide usaha?</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Warna kemasan saja</button>
+        <button type="button" data-choice="1" class="answer">Kebutuhan pelanggan, sumber daya, dan biaya</button>
+        <button type="button" data-choice="2" class="answer">Jumlah pengikut akun pribadi saja</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="akhir" data-answer="2" data-explain="Penjualan awal berskala kecil membantu menguji minat tanpa mengambil risiko modal yang terlalu besar.">
+       <span class="pill">PENERAPAN</span>
+       <h3 class="font-bold mt-2">3. Teman-teman sering kehilangan pulpen saat praktik. Tindakan awal yang paling tepat adalah …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Membuka toko besar tanpa bertanya</button>
+        <button type="button" data-choice="1" class="answer">Mengabaikannya karena masalahnya kecil</button>
+        <button type="button" data-choice="2" class="answer">Menanyakan kebutuhan lalu mencoba menyediakan pulpen dalam jumlah kecil</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="akhir" data-answer="0" data-explain="Harga harus mempertimbangkan biaya dan kesediaan pembeli membayar.">
+       <span class="pill">PENERAPAN</span>
+       <h3 class="font-bold mt-2">4. Biaya membuat satu paket camilan Rp6.000. Sebelum menetapkan harga, kamu perlu …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Menghitung seluruh biaya dan menanyakan harga yang wajar bagi pembeli</button>
+        <button type="button" data-choice="1" class="answer">Menjualnya Rp5.000 tanpa perhitungan lain</button>
+        <button type="button" data-choice="2" class="answer">Menyamakan harga dengan produk yang tidak sejenis</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <div class="question" data-group="akhir" data-answer="1" data-explain="Penalaran yang baik mempertimbangkan permintaan, kecocokan sumber daya, biaya, dan uji skala kecil.">
+       <span class="pill">PENALARAN</span>
+       <h3 class="font-bold mt-2">5. Dua ide sama-sama diminati: A memerlukan alat mahal yang belum tersedia; B dapat dicoba dengan keterampilan dan alat yang sudah ada. Pilihan paling masuk akal adalah …</h3>
+       <div class="grid gap-2 mt-4">
+        <button type="button" data-choice="0" class="answer">Langsung memilih A karena terlihat lebih besar</button>
+        <button type="button" data-choice="1" class="answer">Menguji B dalam skala kecil sambil membandingkan biaya dan respons pembeli</button>
+        <button type="button" data-choice="2" class="answer">Menjalankan keduanya sekaligus tanpa menghitung biaya</button>
+       </div>
+       <p class="feedback mt-3" aria-live="polite"></p>
+      </div>
+      <button type="button" id="check-final" class="primary mt-8">Periksa jawaban</button>
+      <p id="final-result" class="mt-4 font-bold" role="status" aria-live="polite"></p>
+      <button type="button" data-next="refleksi" class="primary mt-6">Lanjut ke refleksi →</button>
+     </div>
+    </section>
+
+    <!-- REFLEKSI -->
+    <section id="refleksi" class="stage" aria-labelledby="refleksi-title">
+     <div class="card p-6 md:p-10">
+      <span class="pill">08 · 2 MENIT</span>
+      <h2 id="refleksi-title" class="mt-4 font-bold">Refleksi &amp; langkah selanjutnya</h2>
+      <p class="mt-4">Seberapa siap kamu menemukan peluang usaha di sekitarmu? Pilih satu jawaban, lalu ceritakan alasannya kepada teman atau guru.</p>
+      <div class="flex flex-wrap gap-3 mt-6">
+       <button type="button" data-reflection="ready" class="answer !w-auto">Siap mencoba</button>
+       <button type="button" data-reflection="learning" class="answer !w-auto">Perlu latihan lagi</button>
+       <button type="button" data-reflection="help" class="answer !w-auto">Masih butuh bantuan</button>
+      </div>
+      <p id="reflection-response" class="mt-5 font-semibold" role="status" aria-live="polite"></p>
+      <div class="mt-7 rounded-2xl bg-[#eaf1e0] p-6">
+       <h3 class="font-bold">Tantangan setelah kelas</h3>
+       <p class="mt-2">Amati satu kebutuhan di rumah atau sekolah. Tuliskan siapa calon pembelinya, solusi yang bisa kamu tawarkan, serta satu cara sederhana untuk menguji idemu.</p>
+      </div>
+      <button type="button" data-next="cover" class="primary mt-7">Kembali ke sampul</button>
+     </div>
+    </section>
+
+   </main>
+   <footer class="pt-8 text-center">
+    <p class="text-[#557064]">Belajar dari masalah nyata. Mulai kecil, uji, lalu perbaiki.</p>
+   </footer>
+  </div>
+
+  <script>
+    const stages = [...document.querySelectorAll('.stage')];
+    function showStage(id) {
+      stages.forEach(section => section.classList.toggle('active', section.id === id));
+      document.querySelectorAll('.nav-btn').forEach(button => {
+        const active = button.dataset.stage === id;
+        button.classList.toggle('active', active);
+        if (active) button.setAttribute('aria-current', 'step');
+        else button.removeAttribute('aria-current');
+      });
+      document.getElementById('main-content').scrollIntoView({behavior:'smooth',block:'start'});
+      document.querySelector('#' + id + ' h1, #' + id + ' h2')?.setAttribute('tabindex','-1');
+      document.querySelector('#' + id + ' h1, #' + id + ' h2')?.focus({preventScroll:true});
+    }
+    document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => showStage(button.dataset.stage)));
+    document.querySelectorAll('[data-next]').forEach(button => button.addEventListener('click', () => showStage(button.dataset.next)));
+
+    document.querySelectorAll('.question').forEach(question => {
+      question.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
+        question.querySelectorAll('[data-choice]').forEach(option => option.classList.toggle('selected', option === button));
+        question.dataset.selected = button.dataset.choice;
+        const feedback = question.querySelector('.feedback');
+        if (question.dataset.group === 'akhir') {
+          feedback.textContent = '';
+          document.getElementById('final-result').textContent = '';
+        } else {
+          const correct = button.dataset.choice === question.dataset.answer;
+          feedback.textContent = correct ? 'Tepat! Kamu sudah memahami gagasan utamanya.' : 'Belum tepat. ' + question.dataset.explain;
+          feedback.style.color = correct ? '#246344' : '#92521d';
+        }
+      }));
+    });
+
+    document.getElementById('check-final').addEventListener('click', () => {
+      const questions = [...document.querySelectorAll('[data-group="akhir"]')];
+      const missing = questions.filter(q => q.dataset.selected === undefined);
+      const result = document.getElementById('final-result');
+      if (missing.length) {
+        result.textContent = 'Jawab semua soal dahulu. Masih ada ' + missing.length + ' soal yang belum dijawab.';
+        result.style.color = '#92521d';
+        return;
+      }
+      let score = 0;
+      questions.forEach(q => {
+        const correct = q.dataset.selected === q.dataset.answer;
+        if (correct) score++;
+        const feedback = q.querySelector('.feedback');
+        feedback.textContent = correct ? 'Benar.' : 'Perlu ditinjau: ' + q.dataset.explain;
+        feedback.style.color = correct ? '#246344' : '#92521d';
+      });
+      result.textContent = 'Skor: ' + score + '/5. ' + (score === 5 ? 'Hebat! Pertahankan cara berpikirmu.' : 'Baca pembahasan pada soal yang keliru, lalu coba jawab kembali.');
+      result.style.color = '#174c3d';
+    });
+
+    document.getElementById('sim-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const need = document.getElementById('sim-need').value;
+      const resource = document.getElementById('sim-resource').value;
+      const channel = document.getElementById('sim-channel').value;
+      if (!need || !resource || !channel) return;
+      document.getElementById('sim-output').textContent = 'Kebutuhan: ' + need + '. Modal awal yang dapat dimanfaatkan: ' + resource + '. Calon pembeli dapat dijangkau melalui ' + channel + '. Apakah pilihan sumber dayamu cocok untuk memenuhi kebutuhan tersebut? Jika belum, sesuaikan ide atau cari sumber daya lain.';
+      document.getElementById('sim-result').classList.remove('hidden');
+    });
+
+    const reflectionMessages = {
+      ready:'Bagus! Coba uji satu ide kecil dan dengarkan tanggapan calon pembeli.',
+      learning:'Tidak apa-apa. Ulangi bagian “Amati kebutuhan” dan “Uji kelayakan”, lalu coba satu contoh di sekitarmu.',
+      help:'Mintalah teman atau guru membantumu menemukan satu kebutuhan nyata, lalu bahas solusi dan biayanya bersama.'
+    };
+    document.querySelectorAll('[data-reflection]').forEach(button => button.addEventListener('click', () => {
+      document.querySelectorAll('[data-reflection]').forEach(other => other.classList.toggle('selected', other === button));
+      document.getElementById('reflection-response').textContent = reflectionMessages[button.dataset.reflection];
+    }));
+  </script>
+
+  <script>
+    /* ===== TEKA-TEKI SILANG ===== */
+    (function(){
+      const WORDS=[
+        {n:1,dir:'M',word:'KREATIF',row:0,col:4,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
+        {n:2,dir:'M',word:'BIAYA',row:2,col:4,clue:'Pengeluaran yang harus dihitung sebelum menetapkan harga jual.'},
+        {n:3,dir:'M',word:'UNTUNG',row:4,col:2,clue:'Selisih lebih antara harga jual dan modal yang dikeluarkan.'},
+        {n:4,dir:'M',word:'USAHA',row:6,col:1,clue:'Kegiatan menghasilkan produk atau layanan untuk orang lain.'},
+        {n:5,dir:'M',word:'INOVASI',row:8,col:3,clue:'Pembaruan ide agar berbeda dari penawaran pesaing.'},
+        {n:1,dir:'V',word:'KEBUTUHAN',row:0,col:4,clue:'Sesuatu yang diperlukan orang lain; titik awal setiap peluang usaha.'}
+      ];
+      const ROWS=9,COLS=11;
+      const gridEl=document.getElementById('tts-grid');
+      const cells={};
+      for(let r=0;r<ROWS;r++){
+        for(let c=0;c<COLS;c++){
+          const d=document.createElement('div');
+          d.className='tts-cell blank';
+          gridEl.appendChild(d);
+          cells[r+','+c]=d;
+        }
+      }
+      const starts={};
+      WORDS.forEach(w=>{
+        for(let i=0;i<w.word.length;i++){
+          const r=(w.dir==='M')?w.row:w.row+i;
+          const c=(w.dir==='M')?w.col+i:w.col;
+          const cell=cells[r+','+c];
+          cell.classList.remove('blank');
+          if(!cell.dataset.letter){
+            cell.dataset.letter=w.word[i];
+            cell.innerHTML='<input maxlength="1" placeholder=" " aria-label="Huruf baris '+(r+1)+' kolom '+(c+1)+'">';
+          }
+          if(i===0){starts[r+','+c]=starts[r+','+c]||w.n;}
+        }
+      });
+      Object.keys(starts).forEach(k=>{
+        const s=document.createElement('span');
+        s.className='num';
+        s.textContent=starts[k];
+        cells[k].appendChild(s);
+      });
+      const mEl=document.getElementById('tts-mendatar'),vEl=document.getElementById('tts-menurun');
+      WORDS.forEach(w=>{
+        const li=document.createElement('li');
+        li.textContent=w.n+'. '+w.clue+' ('+w.word.length+' huruf)';
+        (w.dir==='M'?mEl:vEl).appendChild(li);
+      });
+      function wordCorrect(w){
+        for(let i=0;i<w.word.length;i++){
+          const r=(w.dir==='M')?w.row:w.row+i;
+          const c=(w.dir==='M')?w.col+i:w.col;
+          const inp=cells[r+','+c].querySelector('input');
+          if(!inp||inp.value.toUpperCase()!==w.word[i])return false;
+        }
+        return true;
+      }
+      document.getElementById('tts-check').addEventListener('click',()=>{
+        let ok=0;
+        WORDS.forEach(w=>{
+          const good=wordCorrect(w);
+          if(good)ok++;
+          for(let i=0;i<w.word.length;i++){
+            const r=(w.dir==='M')?w.row:w.row+i;
+            const c=(w.dir==='M')?w.col+i:w.col;
+            const cell=cells[r+','+c];
+            const val=cell.querySelector('input').value;
+            cell.classList.toggle('correct',good);
+            cell.classList.toggle('wrong',!good&&val!=='');
+          }
+        });
+        const fb=document.getElementById('tts-feedback');
+        if(ok===WORDS.length){
+          fb.textContent='Hebat! Semua kata benar. Kosakatamu tentang peluang usaha sudah kuat.';
+          fb.style.color='#246344';
+        }else{
+          fb.textContent='Kata benar: '+ok+' dari '+WORDS.length+'. Perbaiki kotak berbingkai oranye lalu coba lagi.';
+          fb.style.color='#92521d';
+        }
+      });
+      document.getElementById('tts-reveal').addEventListener('click',()=>{
+        Object.values(cells).forEach(cell=>{
+          if(cell.dataset.letter){
+            cell.querySelector('input').value=cell.dataset.letter;
+            cell.classList.add('correct');
+            cell.classList.remove('wrong');
+          }
+        });
+        const fb=document.getElementById('tts-feedback');
+        fb.textContent='Jawaban ditampilkan. Jadikan bahan belajar, lalu kosongkan kotak dan coba ulang.';
+        fb.style.color='#174c3d';
+      });
+    })();
+  </script>
+ </body>
+</html>
