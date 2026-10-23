@@ -30,8 +30,8 @@
     .developer-photo{object-fit:cover;object-position:center top;width:66px;height:66px;border-radius:14px;background:#d9e6cf}
     .foto-bagian{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:20px;margin:22px 0}
     .foto-sampul{display:block;width:100%;border-radius:0;margin:0;max-height:560px;object-fit:cover}
-    
-    /* === TEKA-TEKI SILANG (STYLE KLASIK & OPTIMASI PID) === */
+
+    /* === TTS CLASSIC === */
     .tts-grid{display:grid;grid-template-columns:repeat(11,36px);gap:2px;width:max-content;background:#94a3b8;padding:2px;border:2px solid #0f172a;border-radius:6px}
     .tts-cell{position:relative;width:36px;height:36px}
     .tts-cell.blank{background:#0f172a}
@@ -42,18 +42,17 @@
     .tts-cell .num{position:absolute;top:2px;left:3px;font-size:.55rem;font-weight:700;color:#0f172a;pointer-events:none;line-height:1}
     .tts-cell.correct:not(.blank){background:#bbf7d0}
     .tts-cell.wrong:not(.blank){background:#fecaca}
-    
-    @media(max-width:640px){
-      .tts-grid{grid-template-columns:repeat(11,28px);gap:1px}
-      .tts-cell{width:28px;height:28px}
-      .tts-cell .num{font-size:.45rem}
-    }
-    @media(pointer:coarse){
-      .tts-grid{grid-template-columns:repeat(11,46px);gap:2px}
-      .tts-cell{width:46px;height:46px}
-      .tts-cell input{font-size:1.25rem}
-    }
-    /* ============================================= */
+    @media(max-width:640px){.tts-grid{grid-template-columns:repeat(11,28px);gap:1px}.tts-cell{width:28px;height:28px}.tts-cell .num{font-size:.45rem}}
+    @media(pointer:coarse){.tts-grid{grid-template-columns:repeat(11,46px);gap:2px}.tts-cell{width:46px;height:46px}.tts-cell input{font-size:1.25rem}}
+
+    /* === CARD PETUNJUK TTS === */
+    .tts-clue-card{background:#eaf1e0;border:1px solid var(--line);border-radius:20px;padding:22px 24px}
+    .tts-clue-card h3{color:var(--forest);margin-bottom:10px}
+    .tts-clue-card ol{list-style:none;padding:0;margin:0}
+    .tts-clue-card ol li{padding:8px 12px;border-radius:10px;transition:.15s;line-height:1.5}
+    .tts-clue-card ol li:hover{background:#fff}
+    .tts-clue-card ol li strong{color:var(--forest);margin-right:6px}
+    .tts-clue-card.menurun{background:#f5ecd8}
 
     @media(min-width:1024px){.cover-grid{min-height:500px}}
     @media(prefers-reduced-motion:reduce){.stage.active{animation:none}*{scroll-behavior:auto!important}}
@@ -64,7 +63,7 @@
   <header class="w-full bg-[#174c3d] text-white">
    <div class="max-w-7xl mx-auto px-5 md:px-10 py-5 flex flex-wrap gap-3 items-center justify-between">
     <div class="flex items-center gap-3">
-     <span aria-hidden="true" class="bg-[#d5ec82] text-[#174c3d] rounded-xl p-2 font-extrabold"></span>
+     <span aria-hidden="true" class="bg-[#d5ec82] text-[#174c3d] rounded-xl p-2 font-extrabold">✦</span>
      <span class="font-bold tracking-wide">KELAS KREATIF • XI SMK</span>
     </div>
     <span class="rounded-full bg-white/15 px-4 py-2">1 pertemuan · 50 menit</span>
@@ -237,7 +236,7 @@
       <span class="pill">05 · 5 MENIT</span>
       <h2 id="kuis-title" class="mt-4 font-bold">Kuis: cek pemahaman</h2>
       <p class="mt-3">Pilih jawaban. Jika keliru, baca petunjuk materi lalu coba lagi.</p>
-      <div class="question" data-group="kuis" data-answer="1" data-explain="Pelajari kembali Materi Pokok bagian "Amati kebutuhan": peluang dimulai dari kebutuhan atau masalah yang nyata.">
+      <div class="question" data-group="kuis" data-answer="1" data-explain="Pelajari kembali Materi Pokok bagian 'Amati kebutuhan': peluang dimulai dari kebutuhan atau masalah yang nyata.">
        <h3 class="font-bold">1. Antrean kantin panjang dan banyak siswa belum sarapan. Apa titik awal peluang usaha di sini?</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Membeli peralatan mahal</button>
@@ -246,7 +245,7 @@
        </div>
        <p class="feedback mt-3" aria-live="polite"></p>
       </div>
-      <div class="question" data-group="kuis" data-answer="2" data-explain="Pelajari kembali Materi Pokok bagian "Kenali sumber daya": cocokkan ide dengan keterampilan, bahan, waktu, alat, dan modal yang tersedia.">
+      <div class="question" data-group="kuis" data-answer="2" data-explain="Pelajari kembali Materi Pokok bagian 'Kenali sumber daya': cocokkan ide dengan keterampilan, bahan, waktu, alat, dan modal yang tersedia.">
        <h3 class="font-bold">2. Kamu mahir mendesain dan memiliki akses printer kecil. Ide mana yang paling sesuai sumber dayamu?</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Membuka bengkel kendaraan</button>
@@ -255,7 +254,7 @@
        </div>
        <p class="feedback mt-3" aria-live="polite"></p>
       </div>
-      <div class="question" data-group="kuis" data-answer="0" data-explain="Pelajari kembali Materi Pokok bagian "Uji kelayakan": periksa minat calon pembeli serta biaya sebelum memproduksi lebih banyak.">
+      <div class="question" data-group="kuis" data-answer="0" data-explain="Pelajari kembali Materi Pokok bagian 'Uji kelayakan': periksa minat calon pembeli serta biaya sebelum memproduksi lebih banyak.">
        <h3 class="font-bold">3. Sebelum membuat 100 paket bekal, langkah terbaik adalah …</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Menguji beberapa pesanan dan menghitung biayanya</button>
@@ -275,14 +274,14 @@
       <h2 id="tts-title" class="mt-4 font-bold">Teka-teki silang: uji kosakatamu</h2>
       <p class="mt-3">Isi setiap kotak dengan satu huruf. Petunjuk ada di sebelah kiri, kisi kotak di sebelah kanan.</p>
       <div class="grid gap-8 mt-6 lg:grid-cols-[minmax(0,1fr)_auto] items-start">
-       <div class="order-2 lg:order-1 grid gap-6">
-        <div>
+       <div class="order-2 lg:order-1 grid gap-5">
+        <div class="tts-clue-card">
          <h3 class="font-bold">Mendatar</h3>
-         <ol id="tts-mendatar" class="mt-2 grid gap-2 list-none"></ol>
+         <ol id="tts-mendatar"></ol>
         </div>
-        <div>
+        <div class="tts-clue-card menurun">
          <h3 class="font-bold">Menurun</h3>
-         <ol id="tts-menurun" class="mt-2 grid gap-2 list-none"></ol>
+         <ol id="tts-menurun"></ol>
         </div>
         <p id="tts-feedback" class="feedback" aria-live="polite"></p>
         <div class="flex flex-wrap gap-3">
@@ -462,15 +461,15 @@
   </script>
 
   <script>
-    /* ===== TEKA-TEKI SILANG - LAYOUT LEBIH ACAK & NATURAL ===== */
+    /* ===== TEKA-TEKI SILANG ===== */
     (function(){
       const WORDS=[
-        {n:1,dir:'M',word:'KREATIF',row:0,col:4,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
-        {n:2,dir:'V',word:'KEBUTUHAN',row:0,col:4,clue:'Sesuatu yang diperlukan orang lain; titik awal setiap peluang usaha.'},
-        {n:3,dir:'M',word:'BIAYA',row:7,col:2,clue:'Pengeluaran yang harus dihitung sebelum menetapkan harga jual.'},
-        {n:4,dir:'V',word:'UNTUNG',row:1,col:6,clue:'Selisih lebih antara harga jual dan modal yang dikeluarkan.'},
-        {n:5,dir:'M',word:'USAHA',row:5,col:4,clue:'Kegiatan menghasilkan produk atau layanan untuk orang lain.'},
-        {n:6,dir:'M',word:'INOVASI',row:8,col:2,clue:'Pembaruan ide agar berbeda dari penawaran pesaing.'}
+        {n:1,dir:'M',word:'KREATIF',row:1,col:1,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
+        {n:2,dir:'V',word:'KEBUTUHAN',row:1,col:1,clue:'Sesuatu yang diperlukan orang lain; titik awal setiap peluang usaha.'},
+        {n:3,dir:'M',word:'BIAYA',row:6,col:5,clue:'Pengeluaran yang harus dihitung sebelum menetapkan harga jual.'},
+        {n:4,dir:'V',word:'UNTUNG',row:0,col:7,clue:'Selisih lebih antara harga jual dan modal yang dikeluarkan.'},
+        {n:5,dir:'M',word:'USAHA',row:4,col:3,clue:'Kegiatan menghasilkan produk atau layanan untuk orang lain.'},
+        {n:6,dir:'M',word:'INOVASI',row:8,col:0,clue:'Pembaruan ide agar berbeda dari penawaran pesaing.'}
       ];
       const ROWS=9,COLS=11;
       const gridEl=document.getElementById('tts-grid');
@@ -506,7 +505,7 @@
       const mEl=document.getElementById('tts-mendatar'),vEl=document.getElementById('tts-menurun');
       WORDS.forEach(w=>{
         const li=document.createElement('li');
-        li.textContent=w.n+'. '+w.clue+' ('+w.word.length+' huruf)';
+        li.innerHTML='<strong>'+w.n+'.</strong> '+w.clue+' ('+w.word.length+' huruf)';
         (w.dir==='M'?mEl:vEl).appendChild(li);
       });
 
@@ -538,7 +537,7 @@
         }
         return true;
       }
-      
+
       document.getElementById('tts-check').addEventListener('click',()=>{
         let ok=0;
         WORDS.forEach(w=>{
@@ -561,7 +560,7 @@
           fb.style.color='#92521d';
         }
       });
-      
+
       document.getElementById('tts-reveal').addEventListener('click',()=>{
         Object.values(cells).forEach(cell=>{
           if(cell.dataset.letter){
