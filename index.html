@@ -381,7 +381,7 @@
 
    </main>
    <footer class="pt-8 text-center">
-    <p class="text-[#557064]">Belajar dari masalah nyata. Mulai kecil, uji, lalu perbaiki.</p>
+    <p class="text-[#557064]">Belajar dari masalah nyata. Mulai dari hal kecil, uji, lalu perbaiki.</p>
    </footer>
   </div>
 
@@ -461,7 +461,7 @@
   </script>
 
   <script>
-    /* ===== TEKA-TEKI SILANG ===== */
+    /* ===== TEKA-TEKI SILANG - FIXED ===== */
     (function(){
       const WORDS=[
         {n:1,dir:'M',word:'KREATIF',row:1,col:1,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
@@ -474,6 +474,8 @@
       const ROWS=9,COLS=11;
       const gridEl=document.getElementById('tts-grid');
       const cells={};
+      
+      // Buat grid kosong
       for(let r=0;r<ROWS;r++){
         for(let c=0;c<COLS;c++){
           const d=document.createElement('div');
@@ -482,7 +484,10 @@
           cells[r+','+c]=d;
         }
       }
+      
       const starts={};
+      
+      // Tempatkan kata-kata
       WORDS.forEach(w=>{
         for(let i=0;i<w.word.length;i++){
           const r=(w.dir==='M')?w.row:w.row+i;
@@ -496,12 +501,16 @@
           if(i===0){starts[r+','+c]=starts[r+','+c]||w.n;}
         }
       });
+      
+      // Tambahkan nomor
       Object.keys(starts).forEach(k=>{
         const s=document.createElement('span');
         s.className='num';
         s.textContent=starts[k];
         cells[k].appendChild(s);
       });
+      
+      // Tambahkan petunjuk ke daftar
       const mEl=document.getElementById('tts-mendatar'),vEl=document.getElementById('tts-menurun');
       WORDS.forEach(w=>{
         const li=document.createElement('li');
@@ -509,6 +518,7 @@
         (w.dir==='M'?mEl:vEl).appendChild(li);
       });
 
+      // Auto-focus saat mengetik
       gridEl.addEventListener('input', e => {
         const inp = e.target;
         if(inp.tagName !== 'INPUT') return;
