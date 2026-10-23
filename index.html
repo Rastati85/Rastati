@@ -30,8 +30,8 @@
     .developer-photo{object-fit:cover;object-position:center top;width:66px;height:66px;border-radius:14px;background:#d9e6cf}
     .foto-bagian{display:block;width:100%;max-height:430px;object-fit:cover;border-radius:20px;margin:22px 0}
     .foto-sampul{display:block;width:100%;border-radius:0;margin:0;max-height:560px;object-fit:cover}
-    
-    /* === TEKA-TEKI SILANG (STYLE KLASIK & OPTIMASI PID) === */
+
+    /* === TEKA-TEKI SILANG === */
     .tts-grid{display:grid;grid-template-columns:repeat(11,36px);gap:2px;width:max-content;background:#94a3b8;padding:2px;border:2px solid #0f172a;border-radius:6px}
     .tts-cell{position:relative;width:36px;height:36px}
     .tts-cell.blank{background:#0f172a}
@@ -42,7 +42,7 @@
     .tts-cell .num{position:absolute;top:2px;left:3px;font-size:.55rem;font-weight:700;color:#0f172a;pointer-events:none;line-height:1}
     .tts-cell.correct:not(.blank){background:#bbf7d0}
     .tts-cell.wrong:not(.blank){background:#fecaca}
-    
+
     @media(max-width:640px){
       .tts-grid{grid-template-columns:repeat(11,28px);gap:1px}
       .tts-cell{width:28px;height:28px}
@@ -53,7 +53,6 @@
       .tts-cell{width:46px;height:46px}
       .tts-cell input{font-size:1.25rem}
     }
-    /* ============================================= */
 
     @media(min-width:1024px){.cover-grid{min-height:500px}}
     @media(prefers-reduced-motion:reduce){.stage.active{animation:none}*{scroll-behavior:auto!important}}
@@ -237,7 +236,7 @@
       <span class="pill">05 · 5 MENIT</span>
       <h2 id="kuis-title" class="mt-4 font-bold">Kuis: cek pemahaman</h2>
       <p class="mt-3">Pilih jawaban. Jika keliru, baca petunjuk materi lalu coba lagi.</p>
-      <div class="question" data-group="kuis" data-answer="1" data-explain="Pelajari kembali Materi Pokok bagian "Amati kebutuhan": peluang dimulai dari kebutuhan atau masalah yang nyata.">
+      <div class="question" data-group="kuis" data-answer="1" data-explain="Pelajari kembali Materi Pokok bagian Amati kebutuhan: peluang dimulai dari kebutuhan atau masalah yang nyata.">
        <h3 class="font-bold">1. Antrean kantin panjang dan banyak siswa belum sarapan. Apa titik awal peluang usaha di sini?</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Membeli peralatan mahal</button>
@@ -246,7 +245,7 @@
        </div>
        <p class="feedback mt-3" aria-live="polite"></p>
       </div>
-      <div class="question" data-group="kuis" data-answer="2" data-explain="Pelajari kembali Materi Pokok bagian "Kenali sumber daya": cocokkan ide dengan keterampilan, bahan, waktu, alat, dan modal yang tersedia.">
+      <div class="question" data-group="kuis" data-answer="2" data-explain="Pelajari kembali Materi Pokok bagian Kenali sumber daya: cocokkan ide dengan keterampilan, bahan, waktu, alat, dan modal yang tersedia.">
        <h3 class="font-bold">2. Kamu mahir mendesain dan memiliki akses printer kecil. Ide mana yang paling sesuai sumber dayamu?</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Membuka bengkel kendaraan</button>
@@ -255,7 +254,7 @@
        </div>
        <p class="feedback mt-3" aria-live="polite"></p>
       </div>
-      <div class="question" data-group="kuis" data-answer="0" data-explain="Pelajari kembali Materi Pokok bagian "Uji kelayakan": periksa minat calon pembeli serta biaya sebelum memproduksi lebih banyak.">
+      <div class="question" data-group="kuis" data-answer="0" data-explain="Pelajari kembali Materi Pokok bagian Uji kelayakan: periksa minat calon pembeli serta biaya sebelum memproduksi lebih banyak.">
        <h3 class="font-bold">3. Sebelum membuat 100 paket bekal, langkah terbaik adalah …</h3>
        <div class="grid gap-2 mt-4">
         <button type="button" data-choice="0" class="answer">Menguji beberapa pesanan dan menghitung biayanya</button>
@@ -462,15 +461,22 @@
   </script>
 
   <script>
-    /* ===== TEKA-TEKI SILANG - DIPERBAIKI SESUAI GAMBAR ===== */
+    /* ===== TEKA-TEKI SILANG — TATA LETAK VALID, PENOMORAN OTOMATIS =====
+       Semua persilangan sudah cocok hurufnya:
+       (0,4) K = KREATIF x KEBUTUHAN
+       (2,4) B = BIAYA x KEBUTUHAN
+       (6,1) U = USAHA x UNTUNG
+       (6,4) H = USAHA x KEBUTUHAN
+       (8,4) N = INOVASI x KEBUTUHAN
+    */
     (function(){
       const WORDS=[
-        {n:1,dir:'M',word:'KREATIF',row:0,col:4,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
-        {n:2,dir:'V',word:'KEBUTUHAN',row:0,col:4,clue:'Sesuatu yang diperlukan orang lain; titik awal setiap peluang usaha.'},
-        {n:3,dir:'M',word:'BIAYA',row:7,col:2,clue:'Pengeluaran yang harus dihitung sebelum menetapkan harga jual.'},
-        {n:4,dir:'V',word:'UNTUNG',row:1,col:6,clue:'Selisih lebih antara harga jual dan modal yang dikeluarkan.'},
-        {n:5,dir:'M',word:'USAHA',row:5,col:4,clue:'Kegiatan menghasilkan produk atau layanan untuk orang lain.'},
-        {n:6,dir:'M',word:'INOVASI',row:8,col:2,clue:'Pembaruan ide agar berbeda dari penawaran pesaing.'}
+        {dir:'M',word:'KREATIF',  row:0,col:4,clue:'Sifat berpikir yang menghasilkan gagasan baru dan berbeda.'},
+        {dir:'V',word:'KEBUTUHAN',row:0,col:4,clue:'Sesuatu yang diperlukan orang lain; titik awal setiap peluang usaha.'},
+        {dir:'M',word:'BIAYA',    row:2,col:4,clue:'Pengeluaran yang harus dihitung sebelum menetapkan harga jual.'},
+        {dir:'V',word:'UNTUNG',   row:3,col:1,clue:'Selisih lebih antara harga jual dan modal yang dikeluarkan.'},
+        {dir:'M',word:'USAHA',    row:6,col:1,clue:'Kegiatan menghasilkan produk atau layanan untuk orang lain.'},
+        {dir:'M',word:'INOVASI',  row:8,col:3,clue:'Pembaruan ide agar berbeda dari penawaran pesaing.'}
       ];
       const ROWS=9,COLS=11;
       const gridEl=document.getElementById('tts-grid');
@@ -483,33 +489,46 @@
           cells[r+','+c]=d;
         }
       }
-      const starts={};
+
+      /* Bangun sel huruf (semua kata konsisten karena persilangan cocok) */
       WORDS.forEach(w=>{
         for(let i=0;i<w.word.length;i++){
           const r=(w.dir==='M')?w.row:w.row+i;
           const c=(w.dir==='M')?w.col+i:w.col;
           const cell=cells[r+','+c];
           cell.classList.remove('blank');
-          if(!cell.dataset.letter){
-            cell.dataset.letter=w.word[i];
+          cell.dataset.letter=w.word[i];
+          if(!cell.querySelector('input')){
             cell.innerHTML='<input maxlength="1" aria-label="Huruf baris '+(r+1)+' kolom '+(c+1)+'">';
           }
-          if(i===0){starts[r+','+c]=starts[r+','+c]||w.n;}
         }
       });
-      Object.keys(starts).forEach(k=>{
-        const s=document.createElement('span');
-        s.className='num';
-        s.textContent=starts[k];
-        cells[k].appendChild(s);
-      });
+
+      /* Penomoran otomatis urut baca (baris lalu kolom) */
+      let num=0;
+      for(let r=0;r<ROWS;r++){
+        for(let c=0;c<COLS;c++){
+          const starters=WORDS.filter(w=>w.row===r&&w.col===c);
+          if(starters.length){
+            num++;
+            starters.forEach(w=>w.n=num);
+            const s=document.createElement('span');
+            s.className='num';
+            s.textContent=num;
+            cells[r+','+c].appendChild(s);
+          }
+        }
+      }
+
+      /* Daftar petunjuk terurut sesuai nomor */
       const mEl=document.getElementById('tts-mendatar'),vEl=document.getElementById('tts-menurun');
-      WORDS.forEach(w=>{
+      WORDS.slice().sort((a,b)=>a.n-b.n).forEach(w=>{
         const li=document.createElement('li');
         li.textContent=w.n+'. '+w.clue+' ('+w.word.length+' huruf)';
         (w.dir==='M'?mEl:vEl).appendChild(li);
       });
 
+      /* Pindah fokus otomatis ke kotak berikutnya */
       gridEl.addEventListener('input', e => {
         const inp = e.target;
         if(inp.tagName !== 'INPUT') return;
@@ -529,28 +548,26 @@
         }
       });
 
+      function cellInput(r,c){ return cells[r+','+c].querySelector('input'); }
       function wordCorrect(w){
         for(let i=0;i<w.word.length;i++){
           const r=(w.dir==='M')?w.row:w.row+i;
           const c=(w.dir==='M')?w.col+i:w.col;
-          const inp=cells[r+','+c].querySelector('input');
+          const inp=cellInput(r,c);
           if(!inp||inp.value.toUpperCase()!==w.word[i])return false;
         }
         return true;
       }
-      
+
+      /* Pemeriksaan per sel: hijau jika huruf benar, merah jika huruf salah */
       document.getElementById('tts-check').addEventListener('click',()=>{
         let ok=0;
-        WORDS.forEach(w=>{
-          const good=wordCorrect(w);
-          if(good)ok++;
-          for(let i=0;i<w.word.length;i++){
-            const r=(w.dir==='M')?w.row:w.row+i;
-            const c=(w.dir==='M')?w.col+i:w.col;
-            const cell=cells[r+','+c];
-            cell.classList.toggle('correct',good);
-            cell.classList.toggle('wrong',!good && cell.querySelector('input').value!=='');
-          }
+        WORDS.forEach(w=>{ if(wordCorrect(w)) ok++; });
+        Object.values(cells).forEach(cell=>{
+          if(!cell.dataset.letter) return;
+          const val=(cell.querySelector('input').value||'').toUpperCase();
+          cell.classList.toggle('correct', val===cell.dataset.letter);
+          cell.classList.toggle('wrong', val!=='' && val!==cell.dataset.letter);
         });
         const fb=document.getElementById('tts-feedback');
         if(ok===WORDS.length){
@@ -561,7 +578,7 @@
           fb.style.color='#92521d';
         }
       });
-      
+
       document.getElementById('tts-reveal').addEventListener('click',()=>{
         Object.values(cells).forEach(cell=>{
           if(cell.dataset.letter){
